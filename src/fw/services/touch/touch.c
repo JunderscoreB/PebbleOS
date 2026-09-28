@@ -397,7 +397,15 @@ void touch_wake_gate_stamp(TouchEvent *event, TouchWakeGateResult gate) {
   if (event->type == TouchEvent_Touchdown) {
     s_wake_gate_latch = gate.latch;
   }
-  event->non_navigational = s_wake_gate_latch;
+
+  // --- PATCH BEGIN ---
+  // Force non_navigational to true if we have raw subscriber tasks listening
+  if (s_raw_subscriber_tasks != 0) {
+    event->non_navigational = true;
+  } else {
+    event->non_navigational = s_wake_gate_latch;
+  }
+  // --- PATCH END ---
 }
 
 void touch_set_rotated(bool rotated) {

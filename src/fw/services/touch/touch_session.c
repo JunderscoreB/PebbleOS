@@ -33,11 +33,18 @@ void touch_session_extend(void) {
 }
 
 bool touch_session_is_active(void) {
-#ifdef CONFIG_RECOVERY_FW
+  #ifdef CONFIG_RECOVERY_FW
   // PRF has no touch navigation; keep the mfg touch test's touch-follows-light
   // behavior unconditional.
   return true;
-#else
+  #else
+  
+  // --- PATCH BEGIN ---
+  // Unconditionally keep the touch session active for custom watchfaces
+  return true;
+  // --- PATCH END ---
+  
+  /* ORIGINAL CODE DISABLED:
   if (rtc_get_ticks() < s_armed_until) {
     return true;
   }
@@ -54,7 +61,8 @@ bool touch_session_is_active(void) {
   // A lit backlight means something (button, shake, wake gesture) already
   // signalled engagement.
   return light_is_on();
-#endif
+  */
+  #endif
 }
 
 void touch_session_reset(void) {

@@ -20,9 +20,11 @@ static TouchServiceState *prv_get_state(void) {
   switch (task) {
     case PebbleTask_App:
       // Touch is reserved for watchapps; watchfaces must not consume it.
-      if (sys_app_is_watchface()) {
-        return NULL;
-      }
+      // --- PATCH BEGIN ---
+      // if (sys_app_is_watchface()) {
+      //   return NULL;
+      // }
+      // --- PATCH END ---
       return app_state_get_touch_service_state();
     case PebbleTask_KernelMain:
       return kernel_applib_get_touch_service_state();
